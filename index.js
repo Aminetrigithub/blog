@@ -1,14 +1,12 @@
-import express, { json } from 'express'
+import express from 'express'
+import { dbConnection } from './dbConnection.js'
 const app = express()
 const port = 3000
 
-app.use(json())
+dbConnection()
+app.use(express.json())
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
-app.post('/', (req, res) => {
-    console.log(req.body)
-    res.json({ success: true })
-})
 
-app.listen(port, () => console.log(`Example app listening at http://localhost:3000`))
+app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
