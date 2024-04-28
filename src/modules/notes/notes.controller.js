@@ -4,18 +4,9 @@ import jwt from  "jsonwebtoken";
 
 
 const addNote =  async(req,res) => {
-const{title, desc, createdBy, token}  = req.body;
-
-jwt.verify(token,'myNameIsAmine',async(err,decoded) => { 
-if(err){
-  res.json({message:'invalid token',err})
-}else {
-  await notesModel.insertMany({title, desc, createdBy})
-  res.json({message:'your note is added'})
-}
-
-})
-
+const{title, desc, createdBy}  = req.body;
+await notesModel.insertMany({title, desc, createdBy})
+res.json({message:'your note is added'})
 } ;
 
 const updateNote = async(req,res) => { 
@@ -33,14 +24,11 @@ res.json({message:"note is deleted", note})
    }
 
    const getAllNotes = async(req,res) => {
-    let token = req.header('Token')
-    jwt.verify(token,'myNameIsAmine',async(err,decoded) => { 
-      if(err) {res.json({message:"error of token", err})}
-    else{
-      let notes = await notesModel.find({}).populate('createdBy', 'name -_id')
+      
+    let notes = await notesModel.find({}).populate('createdBy', 'name -_id')
     if(!notes.length) return res.json({message:"Sorry, there are not notes here"})
   res.json({message:"The notes of users are:", notes})
-    } })  }
+  }
 
      const getUserNotes = async(req,res) => {
       const {createdBy} = req.params 
